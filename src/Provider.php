@@ -12,7 +12,9 @@ class Provider extends AbstractProvider implements ProviderInterface
      */
     protected function getAuthUrl($state)
     {
-        return $this->buildAuthUrlFromBase('https://api.vimeo.com/oauth/authorize', $state);
+        return $this->buildAuthUrlFromBase(
+            'https://api.vimeo.com/oauth/authorize', $state
+        );
     }
 
     /**
@@ -28,7 +30,8 @@ class Provider extends AbstractProvider implements ProviderInterface
      */
     protected function getUserByToken($token)
     {
-        $response = $this->getHttpClient()->get('https://api.vimeo.com/me', [
+        $response = $this->getHttpClient()->get(
+            'https://api.vimeo.com/me', [
             'headers' => [
                 'Authorization' => 'bearer '.$token,
             ],
@@ -43,11 +46,9 @@ class Provider extends AbstractProvider implements ProviderInterface
     protected function mapUserToObject(array $user)
     {
         return (new User())->setRaw($user)->map([
-            'id'       => str_replace('/users/', null, $user['uri']),
-            'nickname' => null,
-            'name'     => $user['name'],
-            'email'    => null,
-            'avatar'   => null,
+            'id' => str_replace('/users/', null, $user['uri']),
+            'nickname' => null, 'name' => $user['name'], 'email' => null,
+            'avatar' => null,
         ]);
     }
 
@@ -56,6 +57,8 @@ class Provider extends AbstractProvider implements ProviderInterface
      */
     protected function getTokenFields($code)
     {
-        return array_merge(parent::getTokenFields($code), ['grant_type' => 'authorization_code']);
+        return array_merge(parent::getTokenFields($code), [
+            'grant_type' => 'authorization_code',
+        ]);
     }
 }
